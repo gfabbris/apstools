@@ -49,15 +49,15 @@ class transformRecordChannel(Device):
 
 		~reset
     """
-    current_value = FC(EpicsSignal,         '{self.prefix}.{self._ch_letter}')
-    last_value = FC(EpicsSignalRO,          '{self.prefix}.L{self._ch_letter}')
-    input_pv = FC(EpicsSignal,              '{self.prefix}.INP{self._ch_letter}')
-    input_pv_valid = FC(EpicsSignalRO,      '{self.prefix}.I{self._ch_letter}V')
-    expression_invalid = FC(EpicsSignalRO,  '{self.prefix}.C{self._ch_letter}V')
-    comment = FC(EpicsSignal,               '{self.prefix}.CMT{self._ch_letter}')
-    expression = FC(EpicsSignal,            '{self.prefix}.CLC{self._ch_letter}')
-    output_pv = FC(EpicsSignal,             '{self.prefix}.OUT{self._ch_letter}')
-    output_pv_valid = FC(EpicsSignalRO,     '{self.prefix}.O{self._ch_letter}V')
+    current_value = FC(EpicsSignal,         '{self.prefix}.{self._ch_letter}', auto_monitor=True)
+    last_value = FC(EpicsSignalRO,          '{self.prefix}.L{self._ch_letter}', auto_monitor=True)
+    input_pv = FC(EpicsSignal,              '{self.prefix}.INP{self._ch_letter}', auto_monitor=True)
+    input_pv_valid = FC(EpicsSignalRO,      '{self.prefix}.I{self._ch_letter}V', auto_monitor=True)
+    expression_invalid = FC(EpicsSignalRO,  '{self.prefix}.C{self._ch_letter}V', auto_monitor=True)
+    comment = FC(EpicsSignal,               '{self.prefix}.CMT{self._ch_letter}', auto_monitor=True)
+    expression = FC(EpicsSignal,            '{self.prefix}.CLC{self._ch_letter}', auto_monitor=True)
+    output_pv = FC(EpicsSignal,             '{self.prefix}.OUT{self._ch_letter}', auto_monitor=True)
+    output_pv_valid = FC(EpicsSignalRO,     '{self.prefix}.O{self._ch_letter}V', auto_monitor=True)
 
     read_attrs = ["current_value"]
 
@@ -91,13 +91,13 @@ class TransformRecord(EpicsRecordDeviceCommonAll):
 
     :see: https://htmlpreview.github.io/?https://raw.githubusercontent.com/epics-modules/calc/R3-6-1/documentation/TransformRecord.html#Fields
     """
-    units = Cpt(EpicsSignal, ".EGU")
-    precision = Cpt(EpicsSignal, ".PREC")
-    version = Cpt(EpicsSignalRO, ".VERS")
+    units = Cpt(EpicsSignal, ".EGU", auto_monitor=True)
+    precision = Cpt(EpicsSignal, ".PREC", auto_monitor=True)
+    version = Cpt(EpicsSignalRO, ".VERS", auto_monitor=True)
 
-    calc_option = Cpt(EpicsSignal, ".COPT")
-    invalid_link_action = Cpt(EpicsSignalRO, ".IVLA")
-    input_bitmap = Cpt(EpicsSignalRO, ".MAP")
+    calc_option = Cpt(EpicsSignal, ".COPT", auto_monitor=True)
+    invalid_link_action = Cpt(EpicsSignalRO, ".IVLA", auto_monitor=True)
+    input_bitmap = Cpt(EpicsSignalRO, ".MAP", auto_monitor=True)
 
     read_attrs = APS_utils.itemizer("channels.%s", CHANNEL_LETTERS_LIST)
     hints = {'fields': read_attrs}
@@ -125,7 +125,7 @@ class UserTransformsDevice(Device):
     synApps XXX IOC setup of userTransforms: $(P):userTran$(N)
     """
 
-    enable = Cpt(EpicsSignal, 'userTranEnable')
+    enable = Cpt(EpicsSignal, 'userTranEnable', auto_monitor=True)
     transform1 = Cpt(TransformRecord, 'userTran1')
     transform2 = Cpt(TransformRecord, 'userTran2')
     transform3 = Cpt(TransformRecord, 'userTran3')

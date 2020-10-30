@@ -37,6 +37,6 @@ class BusyStatus(str, Enum):
 
 
 class BusyRecord(Device):
-    state = Component(EpicsSignal, "")
-    output_link = Component(EpicsSignal, ".OUT")
-    forward_link = Component(EpicsSignal, ".FLNK")
+    state = Component(EpicsSignal, "", auto_monitor=True)
+    output_link = Component(EpicsSignal, ".OUT", auto_monitor=True)
+    forward_link = Component(EpicsSignal, ".FLNK", auto_monitor=True)

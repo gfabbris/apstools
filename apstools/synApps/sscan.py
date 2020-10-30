@@ -68,19 +68,19 @@ class sscanPositioner(Device):
 
     """
 
-    readback_pv = FC(EpicsSignal, '{self.prefix}.R{self._ch_num}PV', kind=Kind.config)
-    readback_value = FC(EpicsSignalRO, '{self.prefix}.R{self._ch_num}CV')
-    array = FC(EpicsSignalRO, '{self.prefix}.P{self._ch_num}CA', kind=Kind.omitted)
-    setpoint_pv = FC(EpicsSignal, '{self.prefix}.P{self._ch_num}PV', kind=Kind.config)
-    setpoint_value = FC(EpicsSignalRO, '{self.prefix}.P{self._ch_num}DV')
-    start = FC(EpicsSignal, '{self.prefix}.P{self._ch_num}SP', kind=Kind.config)
-    center = FC(EpicsSignal, '{self.prefix}.P{self._ch_num}CP', kind=Kind.config)
-    end = FC(EpicsSignal, '{self.prefix}.P{self._ch_num}EP', kind=Kind.config)
-    step_size = FC(EpicsSignal, '{self.prefix}.P{self._ch_num}SI', kind=Kind.config)
-    width = FC(EpicsSignal, '{self.prefix}.P{self._ch_num}WD', kind=Kind.config)
-    abs_rel = FC(EpicsSignal, '{self.prefix}.P{self._ch_num}AR', kind=Kind.config)
-    mode = FC(EpicsSignal, '{self.prefix}.P{self._ch_num}SM', kind=Kind.config)
-    units = FC(EpicsSignalRO, '{self.prefix}.P{self._ch_num}EU', kind=Kind.config)
+    readback_pv = FC(EpicsSignal, '{self.prefix}.R{self._ch_num}PV', kind=Kind.config, auto_monitor=True)
+    readback_value = FC(EpicsSignalRO, '{self.prefix}.R{self._ch_num}CV', auto_monitor=True)
+    array = FC(EpicsSignalRO, '{self.prefix}.P{self._ch_num}CA', kind=Kind.omitted, auto_monitor=True)
+    setpoint_pv = FC(EpicsSignal, '{self.prefix}.P{self._ch_num}PV', kind=Kind.config, auto_monitor=True)
+    setpoint_value = FC(EpicsSignalRO, '{self.prefix}.P{self._ch_num}DV', auto_monitor=True)
+    start = FC(EpicsSignal, '{self.prefix}.P{self._ch_num}SP', kind=Kind.config, auto_monitor=True)
+    center = FC(EpicsSignal, '{self.prefix}.P{self._ch_num}CP', kind=Kind.config, auto_monitor=True)
+    end = FC(EpicsSignal, '{self.prefix}.P{self._ch_num}EP', kind=Kind.config, auto_monitor=True)
+    step_size = FC(EpicsSignal, '{self.prefix}.P{self._ch_num}SI', kind=Kind.config, auto_monitor=True)
+    width = FC(EpicsSignal, '{self.prefix}.P{self._ch_num}WD', kind=Kind.config, auto_monitor=True)
+    abs_rel = FC(EpicsSignal, '{self.prefix}.P{self._ch_num}AR', kind=Kind.config, auto_monitor=True)
+    mode = FC(EpicsSignal, '{self.prefix}.P{self._ch_num}SM', kind=Kind.config, auto_monitor=True)
+    units = FC(EpicsSignalRO, '{self.prefix}.P{self._ch_num}EU', kind=Kind.config, auto_monitor=True)
 
     def __init__(self, prefix, num, **kwargs):
         self._ch_num = num
@@ -115,9 +115,9 @@ class sscanDetector(Device):
 
     """
 
-    input_pv = FC(EpicsSignal, '{self.prefix}.D{self._ch_num}PV', kind=Kind.config)
-    current_value = FC(EpicsSignal, '{self.prefix}.D{self._ch_num}CV')
-    array = FC(EpicsSignal, '{self.prefix}.D{self._ch_num}CA', kind=Kind.omitted)
+    input_pv = FC(EpicsSignal, '{self.prefix}.D{self._ch_num}PV', kind=Kind.config, auto_monitor=True)
+    current_value = FC(EpicsSignal, '{self.prefix}.D{self._ch_num}CV', auto_monitor=True)
+    array = FC(EpicsSignal, '{self.prefix}.D{self._ch_num}CA', kind=Kind.omitted, auto_monitor=True)
 
     def __init__(self, prefix, num, **kwargs):
         self._ch_num = num
@@ -142,8 +142,8 @@ class sscanTrigger(Device):
         ~reset
     """
 
-    trigger_pv = FC(EpicsSignal, '{self.prefix}.T{self._ch_num}PV', kind=Kind.config)
-    trigger_value = FC(EpicsSignal, '{self.prefix}.T{self._ch_num}CD')
+    trigger_pv = FC(EpicsSignal, '{self.prefix}.T{self._ch_num}PV', kind=Kind.config, auto_monitor=True)
+    trigger_value = FC(EpicsSignal, '{self.prefix}.T{self._ch_num}CD', auto_monitor=True)
 
     def __init__(self, prefix, num, **kwargs):
         self._ch_num = num
@@ -196,37 +196,37 @@ class SscanRecord(Device):
 
     """
 
-    desc = Cpt(EpicsSignal, '.DESC', kind=Kind.config)
-    scan_phase = Cpt(EpicsSignalRO, '.FAZE')
-    data_state = Cpt(EpicsSignalRO, '.DSTATE')
-    data_ready = Cpt(EpicsSignalRO, '.DATA')
-    scan_busy = Cpt(EpicsSignalRO, '.BUSY')
-    alert_flag = Cpt(EpicsSignalRO, '.ALRT')
-    alert_message = Cpt(EpicsSignalRO, '.SMSG')
-    number_points = Cpt(EpicsSignal, '.NPTS', kind=Kind.config)
-    maximum_number_points = Cpt(EpicsSignal, '.MPTS', kind=Kind.config)
-    current_point = Cpt(EpicsSignalRO, '.CPT')
-    pasm = Cpt(EpicsSignal, '.PASM')
-    execute_scan = Cpt(EpicsSignal, '.EXSC')
-    bspv = Cpt(EpicsSignal, '.BSPV', kind=Kind.config)
-    bscd = Cpt(EpicsSignal, '.BSCD')
-    bswait = Cpt(EpicsSignal, '.BSWAIT')
-    cmnd = Cpt(EpicsSignal, '.CMND')
-    detector_delay = Cpt(EpicsSignal, '.DDLY')
-    positioner_delay = Cpt(EpicsSignal, '.PDLY')
-    reference_detector = Cpt(EpicsSignal, '.REFD', kind=Kind.config)
-    wait = Cpt(EpicsSignal, '.WAIT')
-    wcnt = Cpt(EpicsSignalRO, '.WCNT')
-    awct = Cpt(EpicsSignal, '.AWCT')
-    acqt = Cpt(EpicsSignal, '.ACQT')
-    acqm = Cpt(EpicsSignal, '.ACQM')
-    atime = Cpt(EpicsSignal, '.ATIME')
-    copyto = Cpt(EpicsSignal, '.COPYTO')
-    a1pv = Cpt(EpicsSignal, '.A1PV', kind=Kind.config)
-    a1nv = Cpt(EpicsSignal, '.A1NV', kind=Kind.config)
-    a1cd = Cpt(EpicsSignal, '.A1CD')
-    aspv = Cpt(EpicsSignal, '.ASPV', kind=Kind.config)
-    ascd = Cpt(EpicsSignal, '.ASCD')
+    desc = Cpt(EpicsSignal, '.DESC', kind=Kind.config, auto_monitor=True)
+    scan_phase = Cpt(EpicsSignalRO, '.FAZE', auto_monitor=True)
+    data_state = Cpt(EpicsSignalRO, '.DSTATE', auto_monitor=True)
+    data_ready = Cpt(EpicsSignalRO, '.DATA', auto_monitor=True)
+    scan_busy = Cpt(EpicsSignalRO, '.BUSY', auto_monitor=True)
+    alert_flag = Cpt(EpicsSignalRO, '.ALRT', auto_monitor=True)
+    alert_message = Cpt(EpicsSignalRO, '.SMSG', auto_monitor=True)
+    number_points = Cpt(EpicsSignal, '.NPTS', kind=Kind.config, auto_monitor=True)
+    maximum_number_points = Cpt(EpicsSignal, '.MPTS', kind=Kind.config, auto_monitor=True)
+    current_point = Cpt(EpicsSignalRO, '.CPT', auto_monitor=True)
+    pasm = Cpt(EpicsSignal, '.PASM', auto_monitor=True)
+    execute_scan = Cpt(EpicsSignal, '.EXSC', auto_monitor=True)
+    bspv = Cpt(EpicsSignal, '.BSPV', kind=Kind.config, auto_monitor=True)
+    bscd = Cpt(EpicsSignal, '.BSCD', auto_monitor=True)
+    bswait = Cpt(EpicsSignal, '.BSWAIT', auto_monitor=True)
+    cmnd = Cpt(EpicsSignal, '.CMND', auto_monitor=True)
+    detector_delay = Cpt(EpicsSignal, '.DDLY', auto_monitor=True)
+    positioner_delay = Cpt(EpicsSignal, '.PDLY', auto_monitor=True)
+    reference_detector = Cpt(EpicsSignal, '.REFD', kind=Kind.config, auto_monitor=True)
+    wait = Cpt(EpicsSignal, '.WAIT', auto_monitor=True)
+    wcnt = Cpt(EpicsSignalRO, '.WCNT', auto_monitor=True)
+    awct = Cpt(EpicsSignal, '.AWCT', auto_monitor=True)
+    acqt = Cpt(EpicsSignal, '.ACQT', auto_monitor=True)
+    acqm = Cpt(EpicsSignal, '.ACQM', auto_monitor=True)
+    atime = Cpt(EpicsSignal, '.ATIME', auto_monitor=True)
+    copyto = Cpt(EpicsSignal, '.COPYTO', auto_monitor=True)
+    a1pv = Cpt(EpicsSignal, '.A1PV', kind=Kind.config, auto_monitor=True)
+    a1nv = Cpt(EpicsSignal, '.A1NV', kind=Kind.config, auto_monitor=True)
+    a1cd = Cpt(EpicsSignal, '.A1CD', auto_monitor=True)
+    aspv = Cpt(EpicsSignal, '.ASPV', kind=Kind.config, auto_monitor=True)
+    ascd = Cpt(EpicsSignal, '.ASCD', auto_monitor=True)
 
     positioners = DDC(
         _sscan_positioners(
@@ -325,15 +325,15 @@ class SscanDevice(Device):
 
     """
 
-    scan_dimension = Cpt(EpicsSignalRO, 'ScanDim')
-    scan_pause = Cpt(EpicsSignal, 'scanPause')
-    abort_scans = Cpt(EpicsSignal, 'AbortScans')
+    scan_dimension = Cpt(EpicsSignalRO, 'ScanDim', auto_monitor=True)
+    scan_pause = Cpt(EpicsSignal, 'scanPause', auto_monitor=True)
+    abort_scans = Cpt(EpicsSignal, 'AbortScans', auto_monitor=True)
     scan1 = Cpt(SscanRecord, 'scan1')
     scan2 = Cpt(SscanRecord, 'scan2')
     scan3 = Cpt(SscanRecord, 'scan3')
     scan4 = Cpt(SscanRecord, 'scan4')
     scanH = Cpt(SscanRecord, 'scanH')
-    resume_delay = Cpt(EpicsSignal, 'scanResumeSEQ.DLY1')
+    resume_delay = Cpt(EpicsSignal, 'scanResumeSEQ.DLY1', auto_monitor=True)
 
     def reset(self):
         """set all fields to default values"""

@@ -66,9 +66,9 @@ CHANNEL_LETTERS_LIST = "A B C D E F G H I J K L".split()
 class SwaitRecordChannel(Device):
     """channel of a synApps swait record: A-L"""
 
-    input_value = FC(EpicsSignal, '{self.prefix}.{self._ch_letter}')
-    input_pv = FC(EpicsSignal, '{self.prefix}.IN{self._ch_letter}N')
-    input_trigger = FC(EpicsSignal, '{self.prefix}.IN{self._ch_letter}P')
+    input_value = FC(EpicsSignal, '{self.prefix}.{self._ch_letter}', auto_monitor=True)
+    input_pv = FC(EpicsSignal, '{self.prefix}.IN{self._ch_letter}N', auto_monitor=True)
+    input_trigger = FC(EpicsSignal, '{self.prefix}.IN{self._ch_letter}P', auto_monitor=True)
     read_attrs = ['input_value', ]
     hints = {'fields': read_attrs}
 
@@ -99,21 +99,21 @@ class SwaitRecord(EpicsRecordDeviceCommonAll):
         ~reset
 
     """
-    precision = Cpt(EpicsSignal, ".PREC")
-    high_operating_range = Cpt(EpicsSignal, ".HOPR")
-    low_operating_range = Cpt(EpicsSignal, ".LOPR")
+    precision = Cpt(EpicsSignal, ".PREC", auto_monitor=True)
+    high_operating_range = Cpt(EpicsSignal, ".HOPR", auto_monitor=True)
+    low_operating_range = Cpt(EpicsSignal, ".LOPR", auto_monitor=True)
 
-    calculated_value = Cpt(EpicsSignal, ".VAL")
-    calculation = Cpt(EpicsSignal, ".CALC")
+    calculated_value = Cpt(EpicsSignal, ".VAL", auto_monitor=True)
+    calculation = Cpt(EpicsSignal, ".CALC", auto_monitor=True)
 
-    output_link_pv = Cpt(EpicsSignal, '.OUTN')
-    output_location_name = Cpt(EpicsSignal, '.DOLN')
-    output_location_data = Cpt(EpicsSignal, '.DOLD')
-    output_data_option = Cpt(EpicsSignal, ".DOPT")
+    output_link_pv = Cpt(EpicsSignal, '.OUTN', auto_monitor=True)
+    output_location_name = Cpt(EpicsSignal, '.DOLN', auto_monitor=True)
+    output_location_data = Cpt(EpicsSignal, '.DOLD', auto_monitor=True)
+    output_data_option = Cpt(EpicsSignal, ".DOPT", auto_monitor=True)
 
-    output_execute_option = Cpt(EpicsSignal, ".OOPT")
-    output_execution_delay = Cpt(EpicsSignal, ".ODLY")
-    event_to_issue = Cpt(EpicsSignal, ".OEVT")
+    output_execute_option = Cpt(EpicsSignal, ".OOPT", auto_monitor=True)
+    output_execution_delay = Cpt(EpicsSignal, ".ODLY", auto_monitor=True)
+    event_to_issue = Cpt(EpicsSignal, ".OEVT", auto_monitor=True)
 
     read_attrs = APS_utils.itemizer("channels.%s", CHANNEL_LETTERS_LIST)
     hints = {'fields': read_attrs}
@@ -159,7 +159,7 @@ class UserCalcsDevice(Device):
 
     """
 
-    enable = Cpt(EpicsSignal, 'userCalcEnable')
+    enable = Cpt(EpicsSignal, 'userCalcEnable', auto_monitor=True)
     calc1 = Cpt(SwaitRecord, 'userCalc1')
     calc2 = Cpt(SwaitRecord, 'userCalc2')
     calc3 = Cpt(SwaitRecord, 'userCalc3')

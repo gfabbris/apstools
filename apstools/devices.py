@@ -105,7 +105,7 @@ import warnings
 from .synApps import *
 
 from ophyd import Component, Device, DeviceStatus, FormattedComponent
-from ophyd import Signal, EpicsMotor, EpicsSignal, EpicsSignalRO
+from ophyd import Signal, EpicsMotor, EpicsSignal, EpicsSignalRO 
 from ophyd.mca import EpicsMCARecord
 from ophyd.scaler import EpicsScaler, ScalerCH
 from ophyd.sim import SynSignalRO
@@ -197,15 +197,15 @@ class ApsCycleComputedRO(SynSignalRO):
 class ApsOperatorMessagesDevice(Device):
     """General messages from the APS main control room."""
 
-    operators = Component(EpicsSignalRO, "OPS:message1", string=True)
-    floor_coordinator = Component(EpicsSignalRO, "OPS:message2", string=True)
-    fill_pattern = Component(EpicsSignalRO, "OPS:message3", string=True)
-    last_problem_message = Component(EpicsSignalRO, "OPS:message4", string=True)
-    last_trip_message = Component(EpicsSignalRO, "OPS:message5", string=True)
+    operators = Component(EpicsSignalRO, "OPS:message1", string=True, auto_monitor=True)
+    floor_coordinator = Component(EpicsSignalRO, "OPS:message2", string=True, auto_monitor=True)
+    fill_pattern = Component(EpicsSignalRO, "OPS:message3", string=True, auto_monitor=True)
+    last_problem_message = Component(EpicsSignalRO, "OPS:message4", string=True, auto_monitor=True)
+    last_trip_message = Component(EpicsSignalRO, "OPS:message5", string=True, auto_monitor=True)
     # messages 6-8: meaning?
-    message6 = Component(EpicsSignalRO, "OPS:message6", string=True)
-    message7 = Component(EpicsSignalRO, "OPS:message7", string=True)
-    message8 = Component(EpicsSignalRO, "OPS:message8", string=True)
+    message6 = Component(EpicsSignalRO, "OPS:message6", string=True, auto_monitor=True)
+    message7 = Component(EpicsSignalRO, "OPS:message7", string=True, auto_monitor=True)
+    message8 = Component(EpicsSignalRO, "OPS:message8", string=True, auto_monitor=True)
 
 
 class ApsMachineParametersDevice(Device):
@@ -236,10 +236,10 @@ class ApsMachineParametersDevice(Device):
         ~inUserOperations
 
     """
-    current = Component(EpicsSignalRO, "S:SRcurrentAI")
-    lifetime = Component(EpicsSignalRO, "S:SRlifeTimeHrsCC")
+    current = Component(EpicsSignalRO, "S:SRcurrentAI", auto_monitor=True)
+    lifetime = Component(EpicsSignalRO, "S:SRlifeTimeHrsCC", auto_monitor=True)
     aps_cycle = Component(ApsCycleDM)
-    machine_status = Component(EpicsSignalRO, "S:DesiredMode", string=True)
+    machine_status = Component(EpicsSignalRO, "S:DesiredMode", string=True, auto_monitor=True)
     # In [3]: APS.machine_status.enum_strs
     # Out[3]:
     # ('State Unknown',
@@ -249,7 +249,7 @@ class ApsMachineParametersDevice(Device):
     #  'ASD Studies',
     #  'NO BEAM',
     #  'MAINTENANCE')
-    operating_mode = Component(EpicsSignalRO, "S:ActualMode", string=True)
+    operating_mode = Component(EpicsSignalRO, "S:ActualMode", string=True, auto_monitor=True)
     # In [4]: APS.operating_mode.enum_strs
     # Out[4]:
     # ('State Unknown',
@@ -258,12 +258,12 @@ class ApsMachineParametersDevice(Device):
     # 'Stored Beam',
     # 'Delivered Beam',
     # 'MAINTENANCE')
-    shutter_permit = Component(EpicsSignalRO, "ACIS:ShutterPermit", string=True)
-    fill_number = Component(EpicsSignalRO, "S:FillNumber")
-    orbit_correction = Component(EpicsSignalRO, "S:OrbitCorrection:CC")
-    global_feedback = Component(EpicsSignalRO, "SRFB:GBL:LoopStatusBI", string=True)
-    global_feedback_h = Component(EpicsSignalRO, "SRFB:GBL:HLoopStatusBI", string=True)
-    global_feedback_v = Component(EpicsSignalRO, "SRFB:GBL:VLoopStatusBI", string=True)
+    shutter_permit = Component(EpicsSignalRO, "ACIS:ShutterPermit", string=True, auto_monitor=True)
+    fill_number = Component(EpicsSignalRO, "S:FillNumber", auto_monitor=True)
+    orbit_correction = Component(EpicsSignalRO, "S:OrbitCorrection:CC", auto_monitor=True)
+    global_feedback = Component(EpicsSignalRO, "SRFB:GBL:LoopStatusBI", string=True, auto_monitor=True)
+    global_feedback_h = Component(EpicsSignalRO, "SRFB:GBL:HLoopStatusBI", string=True, auto_monitor=True)
+    global_feedback_v = Component(EpicsSignalRO, "SRFB:GBL:VLoopStatusBI", string=True, auto_monitor=True)
     operator_messages = Component(ApsOperatorMessagesDevice)
 
     @property
@@ -656,8 +656,8 @@ class ApsPssShutter(ShutterBase):
 
     # bo records that reset after a short time, set to 1 to move
     # note: upper-case first characters here (unique to 9-ID)?
-    open_signal = Component(EpicsSignal, "Open")
-    close_signal = Component(EpicsSignal, "Close")
+    open_signal = Component(EpicsSignal, "Open", auto_monitor=True)
+    close_signal = Component(EpicsSignal, "Close", auto_monitor=True)
 
     delay_s = 1.2       # allow time for shutter to move
 
@@ -733,7 +733,7 @@ class ApsPssShutterWithStatus(ApsPssShutter):
     """
 
     # bi record ZNAM=OFF, ONAM=ON
-    pss_state = FormattedComponent(EpicsSignalRO, "{self.state_pv}")
+    pss_state = FormattedComponent(EpicsSignalRO, "{self.state_pv}", auto_monitor=True)
     pss_state_open_values = [1]
     pss_state_closed_values = [0]
 
@@ -906,27 +906,27 @@ class ApsUndulator(Device):
         undulator = ApsUndulator("ID09ds:", name="undulator")
     """
 
-    energy = Component(EpicsSignal, "Energy", write_pv="EnergySet")
-    energy_taper = Component(EpicsSignal, "TaperEnergy", write_pv="TaperEnergySet")
-    gap = Component(EpicsSignal, "Gap", write_pv="GapSet")
-    gap_taper = Component(EpicsSignal, "TaperGap", write_pv="TaperGapSet")
-    start_button = Component(EpicsSignal, "Start", put_complete=True)
-    stop_button = Component(EpicsSignal, "Stop")
-    harmonic_value = Component(EpicsSignal, "HarmonicValue")
-    gap_deadband = Component(EpicsSignal, "DeadbandGap")
-    device_limit = Component(EpicsSignal, "DeviceLimit")
+    energy = Component(EpicsSignal, "Energy", write_pv="EnergySet", auto_monitor=True)
+    energy_taper = Component(EpicsSignal, "TaperEnergy", write_pv="TaperEnergySet", auto_monitor=True)
+    gap = Component(EpicsSignal, "Gap", write_pv="GapSet", auto_monitor=True)
+    gap_taper = Component(EpicsSignal, "TaperGap", write_pv="TaperGapSet", auto_monitor=True)
+    start_button = Component(EpicsSignal, "Start", put_complete=True, auto_monitor=True)
+    stop_button = Component(EpicsSignal, "Stop", auto_monitor=True)
+    harmonic_value = Component(EpicsSignal, "HarmonicValue", auto_monitor=True)
+    gap_deadband = Component(EpicsSignal, "DeadbandGap", auto_monitor=True)
+    device_limit = Component(EpicsSignal, "DeviceLimit", auto_monitor=True)
 
-    access_mode = Component(EpicsSignalRO, "AccessSecurity")
-    device_status = Component(EpicsSignalRO, "Busy")
-    total_power = Component(EpicsSignalRO, "TotalPower")
-    message1 = Component(EpicsSignalRO, "Message1")
-    message2 = Component(EpicsSignalRO, "Message2")
-    message3 = Component(EpicsSignalRO, "Message3")
-    time_left = Component(EpicsSignalRO, "ShClosedTime")
+    access_mode = Component(EpicsSignalRO, "AccessSecurity", auto_monitor=True)
+    device_status = Component(EpicsSignalRO, "Busy", auto_monitor=True)
+    total_power = Component(EpicsSignalRO, "TotalPower", auto_monitor=True)
+    message1 = Component(EpicsSignalRO, "Message1", auto_monitor=True)
+    message2 = Component(EpicsSignalRO, "Message2", auto_monitor=True)
+    message3 = Component(EpicsSignalRO, "Message3", auto_monitor=True)
+    time_left = Component(EpicsSignalRO, "ShClosedTime", auto_monitor=True)
 
-    device = Component(EpicsSignalRO, "Device")
-    location = Component(EpicsSignalRO, "Location")
-    version = Component(EpicsSignalRO, "Version")
+    device = Component(EpicsSignalRO, "Device", auto_monitor=True)
+    location = Component(EpicsSignalRO, "Location", auto_monitor=True)
+    version = Component(EpicsSignalRO, "Version", auto_monitor=True)
 
 
 class ApsUndulatorDual(Device):
@@ -960,23 +960,23 @@ class ApsBssUserInfoDevice(Device):
     NOTE: There is info provided by the APS proposal & ESAF systems.
     """
 
-    proposal_number =   Component(EpicsSignal, "proposal_number")
-    activity =          Component(EpicsSignal, "activity",      string=True)
-    badge =             Component(EpicsSignal, "badge",         string=True)
-    bss_name =          Component(EpicsSignal, "bss_name",      string=True)
-    contact =           Component(EpicsSignal, "contact",       string=True)
-    email =             Component(EpicsSignal, "email",         string=True)
-    institution =       Component(EpicsSignal, "institution",   string=True)
-    station =           Component(EpicsSignal, "station",       string=True)
-    team_others =       Component(EpicsSignal, "team_others",   string=True)
-    time_begin =        Component(EpicsSignal, "time_begin",    string=True)
-    time_end =          Component(EpicsSignal, "time_end",      string=True)
-    timestamp =         Component(EpicsSignal, "timestamp",     string=True)
-    title =             Component(EpicsSignal, "title",         string=True)
+    proposal_number =   Component(EpicsSignal, "proposal_number", auto_monitor=True)
+    activity =          Component(EpicsSignal, "activity",      string=True, auto_monitor=True)
+    badge =             Component(EpicsSignal, "badge",         string=True, auto_monitor=True)
+    bss_name =          Component(EpicsSignal, "bss_name",      string=True, auto_monitor=True)
+    contact =           Component(EpicsSignal, "contact",       string=True, auto_monitor=True)
+    email =             Component(EpicsSignal, "email",         string=True, auto_monitor=True)
+    institution =       Component(EpicsSignal, "institution",   string=True, auto_monitor=True)
+    station =           Component(EpicsSignal, "station",       string=True, auto_monitor=True)
+    team_others =       Component(EpicsSignal, "team_others",   string=True, auto_monitor=True)
+    time_begin =        Component(EpicsSignal, "time_begin",    string=True, auto_monitor=True)
+    time_end =          Component(EpicsSignal, "time_end",      string=True, auto_monitor=True)
+    timestamp =         Component(EpicsSignal, "timestamp",     string=True, auto_monitor=True)
+    title =             Component(EpicsSignal, "title",         string=True, auto_monitor=True)
     # not yet updated, see: https://git.aps.anl.gov/jemian/aps_bss_user_info/issues/10
-    esaf =              Component(EpicsSignal, "esaf",          string=True)
-    esaf_contact =      Component(EpicsSignal, "esaf_contact",  string=True)
-    esaf_team =         Component(EpicsSignal, "esaf_team",     string=True)
+    esaf =              Component(EpicsSignal, "esaf",          string=True, auto_monitor=True)
+    esaf_contact =      Component(EpicsSignal, "esaf_contact",  string=True, auto_monitor=True)
+    esaf_team =         Component(EpicsSignal, "esaf_team",     string=True, auto_monitor=True)
 
 
 class DeviceMixinBase(Device):
@@ -1105,7 +1105,7 @@ class EpicsDescriptionMixin(DeviceMixinBase):
             '''
     """
 
-    desc = Component(EpicsSignal, ".DESC")
+    desc = Component(EpicsSignal, ".DESC", auto_monitor=True)
 
 
 class EpicsMotorDialMixin(DeviceMixinBase):
@@ -1123,7 +1123,7 @@ class EpicsMotorDialMixin(DeviceMixinBase):
 
     """
 
-    dial = Component(EpicsSignal, ".DRBV", write_pv=".DVAL")
+    dial = Component(EpicsSignal, ".DRBV", write_pv=".DVAL", auto_monitor=True)
 
 
 class EpicsMotorEnableMixin(DeviceMixinBase):
@@ -1148,7 +1148,7 @@ class EpicsMotorEnableMixin(DeviceMixinBase):
 
     """
 
-    enable_disable = Component(EpicsSignal, "_able", kind='omitted')
+    enable_disable = Component(EpicsSignal, "_able", kind='omitted', auto_monitor=True)
 
     # constants for internal use
     MOTOR_ENABLE = 0
@@ -1185,8 +1185,8 @@ class EpicsMotorLimitsMixin(DeviceMixinBase):
         m1.set_lim(lo, hi)
     """
 
-    soft_limit_lo = Component(EpicsSignal, ".LLM", kind="omitted")
-    soft_limit_hi = Component(EpicsSignal, ".HLM", kind="omitted")
+    soft_limit_lo = Component(EpicsSignal, ".LLM", kind="omitted", auto_monitor=True)
+    soft_limit_hi = Component(EpicsSignal, ".HLM", kind="omitted", auto_monitor=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -1259,7 +1259,7 @@ class EpicsMotorServoMixin(DeviceMixinBase):
     """
 
     # values: "Enable" or "Disable"
-    servo = Component(EpicsSignal, ".CNEN", string=True)
+    servo = Component(EpicsSignal, ".CNEN", string=True, auto_monitor=True)
 
 
 class EpicsMotorRawMixin(DeviceMixinBase):
@@ -1276,7 +1276,7 @@ class EpicsMotorRawMixin(DeviceMixinBase):
         print(m1.raw.read())
     """
 
-    raw = Component(EpicsSignal, ".RRBV", write_pv=".RVAL")
+    raw = Component(EpicsSignal, ".RRBV", write_pv=".RVAL", auto_monitor=True)
 
 
 class EpicsMotorResolutionMixin(DeviceMixinBase):
@@ -1303,9 +1303,9 @@ class EpicsMotorResolutionMixin(DeviceMixinBase):
         print(f"units_per_rev={m1.units_per_rev.read()}")
     """
 
-    resolution = Component(EpicsSignal, ".MRES", kind="omitted")
-    steps_per_rev = Component(EpicsSignal, ".SREV", kind="omitted")
-    units_per_rev = Component(EpicsSignal, ".UREV", kind="omitted")
+    resolution = Component(EpicsSignal, ".MRES", kind="omitted", auto_monitor=True)
+    steps_per_rev = Component(EpicsSignal, ".SREV", kind="omitted", auto_monitor=True)
+    units_per_rev = Component(EpicsSignal, ".UREV", kind="omitted", auto_monitor=True)
 
 
 class EpicsMotorShutter(OneSignalShutter):
@@ -1390,7 +1390,7 @@ class EpicsOnOffShutter(OneSignalShutter):
 
     """
 
-    signal = Component(EpicsSignal, "")
+    signal = Component(EpicsSignal, "", auto_monitor=True)
 
 
 class DualPf4FilterBox(Device):
@@ -1404,22 +1404,22 @@ class DualPf4FilterBox(Device):
 
     """
 
-    fPosA = Component(EpicsSignal, "fPosA")
-    fPosB = Component(EpicsSignal, "fPosB")
-    bankA = Component(EpicsSignalRO, "bankA")
-    bankB = Component(EpicsSignalRO, "bankB")
-    bitFlagA = Component(EpicsSignalRO, "bitFlagA")
-    bitFlagB = Component(EpicsSignalRO, "bitFlagB")
-    transmission = Component(EpicsSignalRO, "trans")
-    transmission_a = Component(EpicsSignalRO, "transA")
-    transmission_b = Component(EpicsSignalRO, "transB")
-    inverse_transmission = Component(EpicsSignalRO, "invTrans")
-    thickness_Al_mm = Component(EpicsSignalRO, "filterAl")
-    thickness_Ti_mm = Component(EpicsSignalRO, "filterTi")
-    thickness_glass_mm = Component(EpicsSignalRO, "filterGlass")
-    energy_keV_local = Component(EpicsSignal, "E:local")
-    energy_keV_mono = Component(EpicsSignal, "displayEnergy")
-    mode = Component(EpicsSignal, "useMono", string=True)
+    fPosA = Component(EpicsSignal, "fPosA", auto_monitor=True)
+    fPosB = Component(EpicsSignal, "fPosB", auto_monitor=True)
+    bankA = Component(EpicsSignalRO, "bankA", auto_monitor=True)
+    bankB = Component(EpicsSignalRO, "bankB", auto_monitor=True)
+    bitFlagA = Component(EpicsSignalRO, "bitFlagA", auto_monitor=True)
+    bitFlagB = Component(EpicsSignalRO, "bitFlagB", auto_monitor=True)
+    transmission = Component(EpicsSignalRO, "trans", auto_monitor=True)
+    transmission_a = Component(EpicsSignalRO, "transA", auto_monitor=True)
+    transmission_b = Component(EpicsSignalRO, "transB", auto_monitor=True)
+    inverse_transmission = Component(EpicsSignalRO, "invTrans", auto_monitor=True)
+    thickness_Al_mm = Component(EpicsSignalRO, "filterAl", auto_monitor=True)
+    thickness_Ti_mm = Component(EpicsSignalRO, "filterTi", auto_monitor=True)
+    thickness_glass_mm = Component(EpicsSignalRO, "filterGlass", auto_monitor=True)
+    energy_keV_local = Component(EpicsSignal, "E:local", auto_monitor=True)
+    energy_keV_mono = Component(EpicsSignal, "displayEnergy", auto_monitor=True)
+    mode = Component(EpicsSignal, "useMono", string=True, auto_monitor=True)
 
 
 class KohzuSeqCtl_Monochromator(Device):
@@ -1428,26 +1428,26 @@ class KohzuSeqCtl_Monochromator(Device):
     """
 
     # lambda is reserved word in Python, can't use it
-    wavelength = Component(EpicsSignal, "BraggLambdaRdbkAO", write_pv="BraggLambdaAO")
-    energy = Component(EpicsSignal, "BraggERdbkAO", write_pv="BraggEAO")
-    theta = Component(EpicsSignal, "BraggThetaRdbkAO", write_pv="BraggThetaAO")
-    y1 = Component(EpicsSignalRO, "KohzuYRdbkAI")
-    z2 = Component(EpicsSignalRO, "KohzuZRdbkAI")
-    message2 = Component(EpicsSignalRO, "KohzuSeqMsg2SI")
-    operator_acknowledge = Component(EpicsSignal, "KohzuOperAckBO")
-    use_set = Component(EpicsSignal, "KohzuUseSetBO")
-    mode = Component(EpicsSignal, "KohzuModeBO")
-    move_button = Component(EpicsSignal, "KohzuPutBO")
-    moving = Component(EpicsSignal, "KohzuMoving")
-    y_offset = Component(EpicsSignal, "Kohzu_yOffsetAO")
+    wavelength = Component(EpicsSignal, "BraggLambdaRdbkAO", write_pv="BraggLambdaAO", auto_monitor=True)
+    energy = Component(EpicsSignal, "BraggERdbkAO", write_pv="BraggEAO", auto_monitor=True)
+    theta = Component(EpicsSignal, "BraggThetaRdbkAO", write_pv="BraggThetaAO", auto_monitor=True)
+    y1 = Component(EpicsSignalRO, "KohzuYRdbkAI", auto_monitor=True)
+    z2 = Component(EpicsSignalRO, "KohzuZRdbkAI", auto_monitor=True)
+    message2 = Component(EpicsSignalRO, "KohzuSeqMsg2SI", auto_monitor=True)
+    operator_acknowledge = Component(EpicsSignal, "KohzuOperAckBO", auto_monitor=True)
+    use_set = Component(EpicsSignal, "KohzuUseSetBO", auto_monitor=True)
+    mode = Component(EpicsSignal, "KohzuModeBO", auto_monitor=True)
+    move_button = Component(EpicsSignal, "KohzuPutBO", auto_monitor=True)
+    moving = Component(EpicsSignal, "KohzuMoving", auto_monitor=True)
+    y_offset = Component(EpicsSignal, "Kohzu_yOffsetAO", auto_monitor=True)
 
-    crystal_mode = Component(EpicsSignal, "KohzuMode2MO")
-    crystal_h = Component(EpicsSignal, "BraggHAO")
-    crystal_k = Component(EpicsSignal, "BraggKAO")
-    crystal_l = Component(EpicsSignal, "BraggLAO")
-    crystal_lattice_constant = Component(EpicsSignal, "BraggAAO")
-    crystal_2d_spacing = Component(EpicsSignal, "Bragg2dSpacingAO")
-    crystal_type = Component(EpicsSignal, "BraggTypeMO")
+    crystal_mode = Component(EpicsSignal, "KohzuMode2MO", auto_monitor=True)
+    crystal_h = Component(EpicsSignal, "BraggHAO", auto_monitor=True)
+    crystal_k = Component(EpicsSignal, "BraggKAO", auto_monitor=True)
+    crystal_l = Component(EpicsSignal, "BraggLAO", auto_monitor=True)
+    crystal_lattice_constant = Component(EpicsSignal, "BraggAAO", auto_monitor=True)
+    crystal_2d_spacing = Component(EpicsSignal, "Bragg2dSpacingAO", auto_monitor=True)
+    crystal_type = Component(EpicsSignal, "BraggTypeMO", auto_monitor=True)
 
     def move_energy(self, energy):
         """for command-line use:  ``kohzu_mono.energy_move(8.2)``"""
@@ -1596,37 +1596,37 @@ class ProcessController(Device):
 class Struck3820(Device):
     """Struck/SIS 3820 Multi-Channel Scaler (as used by USAXS)"""
 
-    start_all = Component(EpicsSignal, "StartAll")
-    stop_all = Component(EpicsSignal, "StopAll")
-    erase_start = Component(EpicsSignal, "EraseStart")
-    erase_all = Component(EpicsSignal, "EraseAll")
+    start_all = Component(EpicsSignal, "StartAll", auto_monitor=True)
+    stop_all = Component(EpicsSignal, "StopAll", auto_monitor=True)
+    erase_start = Component(EpicsSignal, "EraseStart", auto_monitor=True)
+    erase_all = Component(EpicsSignal, "EraseAll", auto_monitor=True)
     mca1 = Component(EpicsMCARecord, "mca1")
     mca2 = Component(EpicsMCARecord, "mca2")
     mca3 = Component(EpicsMCARecord, "mca3")
     mca4 = Component(EpicsMCARecord, "mca4")
-    clock_frequency = Component(EpicsSignalRO, "clock_frequency")
-    current_channel = Component(EpicsSignalRO, "CurrentChannel")
-    channel_max = Component(EpicsSignalRO, "MaxChannels")
-    channels_used = Component(EpicsSignal, "NuseAll")
-    elapsed_real_time = Component(EpicsSignalRO, "ElapsedReal")
-    preset_real_time = Component(EpicsSignal, "PresetReal")
-    dwell_time = Component(EpicsSignal, "Dwell")
-    prescale = Component(EpicsSignal, "Prescale")
-    acquiring = Component(EpicsSignalRO, "Acquiring", string=True)
-    acquire_mode = Component(EpicsSignalRO, "AcquireMode", string=True)
-    model = Component(EpicsSignalRO, "Model", string=True)
-    firmware = Component(EpicsSignalRO, "Firmware")
-    channel_advance = Component(EpicsSignal, "ChannelAdvance")
-    count_on_start = Component(EpicsSignal, "CountOnStart")
-    software_channel_advance = Component(EpicsSignal, "SoftwareChannelAdvance")
-    channel1_source = Component(EpicsSignal, "Channel1Source")
-    user_led = Component(EpicsSignal, "UserLED")
-    mux_output = Component(EpicsSignal, "MUXOutput")
-    input_mode = Component(EpicsSignal, "InputMode")
-    output_mode = Component(EpicsSignal, "OutputMode")
-    output_polarity = Component(EpicsSignal, "OutputPolarity")
-    read_rate = Component(EpicsSignal, "ReadAll.SCAN")
-    do_readl_all = Component(EpicsSignal, "DoReadAll")
+    clock_frequency = Component(EpicsSignalRO, "clock_frequency", auto_monitor=True)
+    current_channel = Component(EpicsSignalRO, "CurrentChannel", auto_monitor=True)
+    channel_max = Component(EpicsSignalRO, "MaxChannels", auto_monitor=True)
+    channels_used = Component(EpicsSignal, "NuseAll", auto_monitor=True)
+    elapsed_real_time = Component(EpicsSignalRO, "ElapsedReal", auto_monitor=True)
+    preset_real_time = Component(EpicsSignal, "PresetReal", auto_monitor=True)
+    dwell_time = Component(EpicsSignal, "Dwell", auto_monitor=True)
+    prescale = Component(EpicsSignal, "Prescale", auto_monitor=True)
+    acquiring = Component(EpicsSignalRO, "Acquiring", string=True, auto_monitor=True)
+    acquire_mode = Component(EpicsSignalRO, "AcquireMode", string=True, auto_monitor=True)
+    model = Component(EpicsSignalRO, "Model", string=True, auto_monitor=True)
+    firmware = Component(EpicsSignalRO, "Firmware", auto_monitor=True)
+    channel_advance = Component(EpicsSignal, "ChannelAdvance", auto_monitor=True)
+    count_on_start = Component(EpicsSignal, "CountOnStart", auto_monitor=True)
+    software_channel_advance = Component(EpicsSignal, "SoftwareChannelAdvance", auto_monitor=True)
+    channel1_source = Component(EpicsSignal, "Channel1Source", auto_monitor=True)
+    user_led = Component(EpicsSignal, "UserLED", auto_monitor=True)
+    mux_output = Component(EpicsSignal, "MUXOutput", auto_monitor=True)
+    input_mode = Component(EpicsSignal, "InputMode", auto_monitor=True)
+    output_mode = Component(EpicsSignal, "OutputMode", auto_monitor=True)
+    output_polarity = Component(EpicsSignal, "OutputPolarity", auto_monitor=True)
+    read_rate = Component(EpicsSignal, "ReadAll.SCAN", auto_monitor=True)
+    do_readl_all = Component(EpicsSignal, "DoReadAll", auto_monitor=True)
 
 
 # AreaDetector support

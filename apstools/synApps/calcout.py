@@ -93,26 +93,26 @@ class CalcoutRecord(EpicsRecordFloatFields, EpicsRecordDeviceCommonAll):
 
     :see: https://wiki-ext.aps.anl.gov/epics/index.php/RRM_3-14_Calcout
     """
-    units = Cpt(EpicsSignal, ".EGU")
-    precision = Cpt(EpicsSignal, ".PREC")
+    units = Cpt(EpicsSignal, ".EGU", auto_monitor=True)
+    precision = Cpt(EpicsSignal, ".PREC", auto_monitor=True)
 
-    calculated_value = Cpt(EpicsSignal, ".VAL")
-    calculation = Cpt(EpicsSignal, ".CALC")
+    calculated_value = Cpt(EpicsSignal, ".VAL", auto_monitor=True)
+    calculation = Cpt(EpicsSignal, ".CALC", auto_monitor=True)
 
-    output_pv = Cpt(EpicsSignal, ".OUT")
-    output_execute_option = Cpt(EpicsSignal, ".OOPT")
-    output_execution_delay = Cpt(EpicsSignal, ".ODLY")
-    output_data_option = Cpt(EpicsSignal, ".DOPT")
-    output_calculation = Cpt(EpicsSignal, ".OCAL")
-    output_value = Cpt(EpicsSignal, ".OVAL")
-    invalid_output_action = Cpt(EpicsSignal, ".IVOA")
-    invalid_output_value = Cpt(EpicsSignal, ".IVOV")
-    event_to_issue = Cpt(EpicsSignal, ".OEVT")
+    output_pv = Cpt(EpicsSignal, ".OUT", auto_monitor=True)
+    output_execute_option = Cpt(EpicsSignal, ".OOPT", auto_monitor=True)
+    output_execution_delay = Cpt(EpicsSignal, ".ODLY", auto_monitor=True)
+    output_data_option = Cpt(EpicsSignal, ".DOPT", auto_monitor=True)
+    output_calculation = Cpt(EpicsSignal, ".OCAL", auto_monitor=True)
+    output_value = Cpt(EpicsSignal, ".OVAL", auto_monitor=True)
+    invalid_output_action = Cpt(EpicsSignal, ".IVOA", auto_monitor=True)
+    invalid_output_value = Cpt(EpicsSignal, ".IVOV", auto_monitor=True)
+    event_to_issue = Cpt(EpicsSignal, ".OEVT", auto_monitor=True)
 
-    output_pv_status = Cpt(EpicsSignal, ".OUTV")
-    calculation_valid = Cpt(EpicsSignal, ".CLCV")
-    output_calculation_valid = Cpt(EpicsSignal, ".OCLV")
-    output_delay_active = Cpt(EpicsSignal, ".DLYA")
+    output_pv_status = Cpt(EpicsSignal, ".OUTV", auto_monitor=True)
+    calculation_valid = Cpt(EpicsSignal, ".CLCV", auto_monitor=True)
+    output_calculation_valid = Cpt(EpicsSignal, ".OCLV", auto_monitor=True)
+    output_delay_active = Cpt(EpicsSignal, ".DLYA", auto_monitor=True)
 
     channels = DDC(_channels(CHANNEL_LETTERS_LIST))
 
@@ -163,7 +163,7 @@ class UserCalcoutDevice(Device):
 
     """
 
-    enable = Cpt(EpicsSignal, 'userCalcOutEnable')
+    enable = Cpt(EpicsSignal, 'userCalcOutEnable', auto_monitor=True)
     calcout1 = Cpt(CalcoutRecord, 'userCalcOut1')
     calcout2 = Cpt(CalcoutRecord, 'userCalcOut2')
     calcout3 = Cpt(CalcoutRecord, 'userCalcOut3')
